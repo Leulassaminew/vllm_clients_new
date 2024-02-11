@@ -25,6 +25,14 @@ async def handler(job):
     j=job["input"]
     t=j["task"]
     if t!="report":
+        j["sampling_params"]={
+                              "temperature": 0.5,
+                              "stop":"user",
+                              "top_k": -1,
+                              "top_p": 0.7,
+                              "min_p": 0.9,
+                              "max_tokens": 256
+                                   } 
         messages=j["prompt"]
         count_usage=j.pop("count_usage")
         score=j.pop("score")
@@ -55,9 +63,18 @@ async def handler(job):
                     count_usage[item]+=1
                 else:
                     score+=1
+                    
         j["score"]=score
         j["ind"]=ind
         j["classifier"]=classifier
+    else:
+        j["sampling_params"]={
+                              "temperature": 0.5,
+                              "top_k": -1,
+                              "top_p": 0.7,
+                              "min_p": 0.9,
+                              "max_tokens": 512
+                                   }
     job_input = JobInput(j)
     results_generator = vllm_engine.generate(job_input)
     async for batch in results_generator:
