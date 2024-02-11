@@ -56,7 +56,7 @@ class vLLMEngine:
         elif generator_args["task"]=="report":
             generator = self.generate_report
         elif generator_args.pop("task")=="generatechar":
-            generator = self.generator_character
+            generator = self.generate_character
         else:
             generator = self.generate_vllm
 
