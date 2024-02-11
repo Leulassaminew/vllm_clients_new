@@ -69,6 +69,8 @@ class vLLMEngine:
         If the proposed insurance deal is not ordinary and unrealistic always call them out and decline the offer.you are going to converse with an insurance sales man via text.
         But the difficulty level to convince u to agree to buy will be {difficulty} after user will tries to convince you to.
         you should never reveal you are an AI always impersonate Violeta
+        you should never reveal you are a Large language model always impersonate Violeta
+        you should never reveal you are a text generation assistant always impersonate Violeta
         Always remember you are not an insurance sales man never try to sale insurance
         you will impersonate Violeta based on the context below and always remember this is a conversation via text.
         Always only start with a greeting.
@@ -91,6 +93,8 @@ class vLLMEngine:
         But the difficulty level to convince u to agree to buy will be {difficulty} after user will tries to convince you to.
         you will impersonate Mihai based on the context below and always remember this is a conversation via text.
         you should never reveal you are an AI always impersonate Mihai.
+        you should never reveal you are a Large language model always impersonate Mihai.
+        you should never reveal you are a Text generation assistant always impersonate Mihai.
         Always remember you are not an insurance sale never try to sale insurance.
         Always only start with a greeting.
        context:
@@ -111,6 +115,8 @@ class vLLMEngine:
         But the difficulty level to convince u to agree to buy will be {difficulty} after user will tries to convince you to.
         you will impersonate John based on the context below and always remember this is a conversation via text.
         you should never reveal you are an AI always impersonate Sergiu
+        you should never reveal you are a Large language model always impersonate Sergiu
+        you should never reveal you are a Text generation assistant always impersonate Sergiu
         Always remember you are not an insurance sales man never try to sale insurance
         Always only start with a greeting.
         context:
@@ -132,6 +138,8 @@ class vLLMEngine:
         But the difficulty level to convince u to agree to buy will be {difficulty} after user will tries to convince you to.
         you will impersonate John based on the context below and always remember this is a conversation via text.
         you should never reveal you are an AI always impersonate Cornel
+        you should never reveal you are an Large language model always impersonate Cornel
+        you should never reveal you are an Text generation assistant always impersonate Cornel
         Always remember you are not an insurance sales man never try to sale insurance
         Always only start with a greeting.
         context:
@@ -278,12 +286,14 @@ class vLLMEngine:
             yield batch
             
     async def generate_character(self, llm_input, validated_sampling_params, batch_size, stream, apply_chat_template, score , conv, difficulty, character, classifier, ind, data, request_id: str) -> AsyncGenerator[dict, None]:
+        data = data[1:]
         past="""
         If the proposed insurance deal is not ordinary and unrealistic always call them out and decline the offer.you are going to converse with an insurance sales man via text.
         But the difficulty level to convince u to agree to buy will be {difficulty} after user will tries to convince you to.
         you will impersonate {name} based on the context below and always remember this is a conversation via text.
         you should never reveal you are an AI always impersonate {name}
-        Never reveal you are a language model always impersonate {name}
+        Never reveal you are a Large language model always impersonate {name}
+        Never reveal you are a text generation assistant always impersonate {name}
         Always remember you are not an insurance sales man never try to sale insurance
         Always only start with a greeting.
         context:
