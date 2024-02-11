@@ -30,7 +30,7 @@ class Tokenizer:
             input = [{"role": "user", "content": input}]
         else:
             raise ValueError("Input must be a string or a list of messages")
-        
+
         return self.tokenizer.apply_chat_template(
             input, tokenize=False, add_generation_prompt=True
         )
@@ -48,7 +48,7 @@ class vLLMEngine:
 
     async def generate(self, job_input):
         generator_args = job_input.__dict__
-        
+
         if generator_args.pop("use_openai_format"):
             if self.openai_engine is None:
                 raise ValueError("OpenAI Chat Completion Format is not enabled for this model")
@@ -56,12 +56,12 @@ class vLLMEngine:
         elif generator_args.pop("task")=="report":
             generator = self.generate_report
         else:
-            generator = self.generate_vllm       
-        
+            generator = self.generate_vllm
+
         async for batch in generator(**generator_args):
             yield batch
 
-    async def generate_vllm(self, llm_input, validated_sampling_params, batch_size, stream, apply_chat_template, score , conv, difficulty, character, classifier, ind, request_id: str) -> AsyncGenerator[dict, None]:        
+    async def generate_vllm(self, llm_input, validated_sampling_params, batch_size, stream, apply_chat_template, score , conv, difficulty, character, classifier, ind, request_id: str) -> AsyncGenerator[dict, None]:
         charact={
         "Violeta":"""
         If the proposed insurance deal is not ordinary and unrealistic always call them out and decline the offer.you are going to converse with an insurance sales man via text.
@@ -75,17 +75,14 @@ class vLLMEngine:
             Violeta is married and has an 11 year old child.
             Violeta's monthly income is 880 euros
             Violeta temperament is Sanguine and her behaviour and talking style will be based on the temperament.
-            Violeta's tendency to ask more about proposed insurance deals is {tend}. 
+            Violeta's tendency to ask more about proposed insurance deals is {tend}.
             Violeta's tendancy to buy the insurance deal that he likes immediately is {obj}.
             Violeta has one car and owns a 2 bedroom apartment.
             Violeta has {inti} interest of litsening to insurance deals and his chance of buying an insurance deal is {chance}.
             Violeta is a {busy} person and is {interest} in small talks.
-            Violeta's degree of interest in insurance deals is {doi},And Violeta's level of friendliness is {fid},her openness related to his insurance needs is {needi}    
+            Violeta's degree of interest in insurance deals is {doi},And Violeta's level of friendliness is {fid},her openness related to his insurance needs is {needi}
             Violetta {decide}
-        restart this type of conversation u must always start only with a short gretting and make your answers short and only from the context and always impersonate Violeta and give fake information if u are asked something you do not know.
-        split:
-        user: hi
-        Violeta: hey how are you"""
+        Give a response to user based on the above context always impersonate Violeta"""
         ,
         "Mihai" : """
         If the proposed insurance deal is not ordinary and unrealistic always call them out and decline the offer.you are going to converse with an insurance sales man via text.
@@ -98,17 +95,14 @@ class vLLMEngine:
             Mihai is 25 year old and unmarried.
             Mihai has a monthly income of 500 Euros.
             Mihai temperament is Phlegmatic and his behaviour and talking style will be based on the temperament.
-            Mihai's tendency to ask more about proposed insurance deals is {tend}.    
-            Mihai's tendancy to buy the insurance that appeals to her immediately is {obj}.     
+            Mihai's tendency to ask more about proposed insurance deals is {tend}.
+            Mihai's tendancy to buy the insurance that appeals to her immediately is {obj}.
             Mihai has no car and lives with parents.
             Mihai has {inti} interest of litsening to insurance deals and her chance of buying an insurance deal is {chance}.
-            Mihai is a {busy} person and is {interest} in small talks.    
+            Mihai is a {busy} person and is {interest} in small talks.
             Mihai's degree of interest in insurance deals is {doi},And Mihai's level of friendliness is {fid},his openness related to her insurance needs is {needi}.
             Mihai {decide}
-        restart this type of conversation and make your answers short and only from the context and always impersonate Mihai and give fake information if u are asked something you do not know.
-        split:
-        user: hi
-        Mihai: hey how are you
+        Give a response to user based on the above context always impersonate Mihai
         """,
         "Sergiu" : """
         If the proposed insurance deal is not ordinary and unrealistic always call them out and decline the offer.you are going to converse with an insurance sales man via text.
@@ -120,19 +114,16 @@ class vLLMEngine:
         context:
             Sergiu is a 52 years old man.
             Sergiu is married and has a 27 years old child.
-            Sergiu temperament is Choleric and his behaviour and talking style will be based on the temperament. 
-            Sergiu's tendency to ask more about proposed insurance deals is {tend}. 
-            Sergiu's tendancy to buy the insurance that appeals to him immediately is {obj}.        
+            Sergiu temperament is Choleric and his behaviour and talking style will be based on the temperament.
+            Sergiu's tendency to ask more about proposed insurance deals is {tend}.
+            Sergiu's tendancy to buy the insurance that appeals to him immediately is {obj}.
             Sergiu has a car and owns 1 villa and 1 apartment.
             Sergiu own's a buisness and has a monthly income of 3000 Euros.
             Sergiu has {inti} interest of litsening to insurance deals and his chance of buying an insurance deal is {chance}.
-            Sergiu is a {busy} person and is {interest} in small talks.   
-            Sergiu's degree of interest in insurance deals is {doi},And Sergiu's level of friendliness is {fid},his openness related to his insurance needs is {needi}    
+            Sergiu is a {busy} person and is {interest} in small talks.
+            Sergiu's degree of interest in insurance deals is {doi},And Sergiu's level of friendliness is {fid},his openness related to his insurance needs is {needi}
             Sergiu {decide}
-        restart this type of conversation and make your answers short and only from the context and always impersonate Sergiu and give fake information if u are asked something you do not know.
-        split:
-        user: hi
-        Sergiu: hey how are you
+        Give a response to user based on the above context always impersonate Sergiu
         """,
         "Cornel" : """
         If the proposed insurance deal is not ordinary and unrealistic always call them out and decline the offer.you are going to converse with an insurance sales man via text.
@@ -144,19 +135,16 @@ class vLLMEngine:
         context:
             Cornel is a 30 years old man.
             Cornel is married and has no children.
-            Cornel temperament is Melancholic and his behaviour and talking style will be based on the temperament. 
-            Cornel's tendency to ask more about proposed insurance deals is {tend}. 
-            Cornel's tendancy to buy the insurance that appeals to him immediately is {obj}.        
+            Cornel temperament is Melancholic and his behaviour and talking style will be based on the temperament.
+            Cornel's tendency to ask more about proposed insurance deals is {tend}.
+            Cornel's tendancy to buy the insurance that appeals to him immediately is {obj}.
             Cornel has one car and owns one apartment.
             Cornel has a monthly income of 1000 Euros.
             Cornel has {inti} interest of litsening to insurance deals and his chance of buying an insurance deal is {chance}.
-            Cornel is a {busy} person and is {interest} in small talks.   
-            Cornel's degree of interest in insurance deals is {doi},And Cornel's level of friendliness is {fid},his openness related to his insurance needs is {needi}    
+            Cornel is a {busy} person and is {interest} in small talks.
+            Cornel's degree of interest in insurance deals is {doi},And Cornel's level of friendliness is {fid},his openness related to his insurance needs is {needi}
             Cornel {decide}
-        restart this type of conversation and make your answers short and only from the context and always impersonate Cornel and give fake information if u are asked something you do not know.
-        split:
-        user: hi
-        Cornel: hey how are you
+        Give a response to user based on the above context always impersonate Cornel
         """,
         "sample":"""
         If the proposed insurance deal is not ordinary and unrealistic always call them out and decline the offer.you are going to converse with an insurance sales man via text.
@@ -170,19 +158,16 @@ class vLLMEngine:
             {name} has {children} kids and is {marriagestatus} and works at meetplaceai.
             {name} has {education}.lives in {country}.
             {name} has a {temp} temperament
-            {name}'s tendency to ask more about proposed insurance deals is {tend}. 
-            {name}'s tendancy to buy the insurance that appeals to him immediately is {obj}.    
+            {name}'s tendency to ask more about proposed insurance deals is {tend}.
+            {name}'s tendancy to buy the insurance that appeals to him immediately is {obj}.
             {name} already has {existinginsurance} insurance
             {name} has {numberofcars} car and owns a 2 bedroom apartment
             {name} has {saving} in savings and has high investment risk tolerance.
             {name} has {inti} interest of litsening to insurance deals and his chance of buying an insurance deal is {chance}.
             {name} is a {busy} person and is {interest} in small talks.
-            {name}'s degree of interest in insurance deals is {doi},And {name}'s level of friendliness is {fid},his openness related to his insurance needs is {needi}    
+            {name}'s degree of interest in insurance deals is {doi},And {name}'s level of friendliness is {fid},his openness related to his insurance needs is {needi}
             {name} {decide}
-        restart this type of conversation and make your answers short and only from the context and always impersonate {name} and give fake information if u are asked something you do not know.
-        split:
-        user: hi
-        {name}: hey how are you
+        Give a response to user based on the above context always impersonate {name}
         """
         }
         past=charact[character]
@@ -224,7 +209,7 @@ class vLLMEngine:
         else:
             difficulty, interest, busy,obj = "hard", "not interested", "very busy","low"
             doi, fid, needi,inti,chance,tend = "low", "low", "low","low","low","low"
-            decide = "in the conversation must show no interest in buying the insurance deals by user"            
+            decide = "in the conversation must show no interest in buying the insurance deals by user"
         past = past.replace("{difficulty}", difficulty)
         past = past.replace("{interest}", interest)
         past = past.replace("{busy}", busy)
@@ -235,7 +220,7 @@ class vLLMEngine:
         past = past.replace("{chance}", chance)
         past = past.replace("{tend}", tend)
         past = past.replace("{obj}", obj)
-        past = past.replace("{decide}", decide)        
+        past = past.replace("{decide}", decide)
         llm_input = past+"\n"+conv+"\n"+"user:"+llm_input+"\n"+character+":"
         if apply_chat_template or isinstance(llm_input, list):
             llm_input = self.tokenizer.apply_chat_template(llm_input)
@@ -284,7 +269,7 @@ class vLLMEngine:
         for item in c:
             if item['score'] > 0.1:
                 f[item['label']] = round(item['score'], 1)
-                
+
         if token_counters["batch"] > 0:
             batch["output"]=[batch['choices'][0]['tokens'][0],score,f,ind]
             batch["usage"] = {"input": n_input_tokens, "output": token_counters["total"]}
@@ -299,19 +284,19 @@ class vLLMEngine:
             When preparing the report only focus on the conversation only
             give a hones report based on the conversation
             Always use the format below and all three or more points and the report must be focused on sales techniques used by user.
-            1)Strengths:
+            1)Strengths:\n
             *
             *
-            2)Weakness:
+            2)Weakness:\n
             *
             *
-            3)Areas for improvment:
+            3)Areas for improvment:\n
             *
             *
             Conversation between user and {character}:
         """
         promp = promp.replace("{character}",character)
-        p=promp+conv+"End of conversation"
+        p=promp+conv+"End of conversation Response:"
         llm_input=p
         validated_sampling_params = SamplingParams(**validated_sampling_params)
         results_generator = self.llm.generate(llm_input, validated_sampling_params, request_id)
@@ -355,39 +340,39 @@ class vLLMEngine:
 
         if token_counters["batch"] > 0:
             batch["usage"] = {"input": n_input_tokens, "output": token_counters["total"]}
-            yield batch    
-    
+            yield batch
+
     async def generate_openai_chat(self, llm_input, validated_sampling_params, batch_size, stream, apply_chat_template, request_id: str) -> AsyncGenerator[dict, None]:
-        
+
         if isinstance(llm_input, str):
             llm_input = [{"role": "user", "content": llm_input}]
             logging.warning("OpenAI Chat Completion format requires list input, converting to list and assigning 'user' role")
-            
+
         if not self.openai_engine:
             raise ValueError("OpenAI Chat Completion format is disabled")
-        
+
         chat_completion_request = ChatCompletionRequest(
             model=self.config["model"],
             messages=llm_input,
             stream=stream,
-            **validated_sampling_params, 
+            **validated_sampling_params,
         )
 
         response_generator = await self.openai_engine.create_chat_completion(chat_completion_request, DummyRequest())
         if not stream:
             yield json.loads(response_generator.model_dump_json())
-        else: 
+        else:
             batch_contents = {}
             batch_latest_choices = {}
             batch_token_counter = 0
             last_chunk = {}
-            
+
             async for chunk_str in response_generator:
                 try:
-                    chunk = json.loads(chunk_str.removeprefix("data: ").rstrip("\n\n")) 
+                    chunk = json.loads(chunk_str.removeprefix("data: ").rstrip("\n\n"))
                 except:
                     continue
-                
+
                 if "choices" in chunk:
                     for choice in chunk["choices"]:
                         choice_index = choice["index"]
@@ -396,13 +381,13 @@ class vLLMEngine:
                             batch_latest_choices[choice_index] = choice
                             batch_token_counter += 1
                     last_chunk = chunk
-                
+
                 if batch_token_counter >= batch_size:
                     for choice_index in batch_latest_choices:
                         batch_latest_choices[choice_index]["delta"]["content"] = batch_contents[choice_index]
                     last_chunk["choices"] = list(batch_latest_choices.values())
                     yield last_chunk
-                    
+
                     batch_contents = {}
                     batch_latest_choices = {}
                     batch_token_counter = 0
@@ -412,11 +397,11 @@ class vLLMEngine:
                     batch_latest_choices[choice_index]["delta"]["content"] = batch_contents[choice_index]
                 last_chunk["choices"] = list(batch_latest_choices.values())
                 yield last_chunk
-    
+
     def _initialize_config(self):
         quantization = self._get_quantization()
         model, download_dir = self._get_model_name_and_path()
-        
+
         return {
             "model": model,
             "download_dir": download_dir,
@@ -439,27 +424,27 @@ class vLLMEngine:
         except Exception as e:
             logging.error("Error initializing vLLM engine: %s", e)
             raise e
-    
+
     def _initialize_openai(self):
         if bool(int(os.getenv("ALLOW_OPENAI_FORMAT", 1))) and self.tokenizer.has_chat_template:
             return OpenAIServingChat(self.llm, self.config["model"], "assistant", self.tokenizer.tokenizer.chat_template)
-        else: 
+        else:
             return None
-        
+
     def _get_max_parallel_loading_workers(self):
         if int(os.getenv("TENSOR_PARALLEL_SIZE", 1)) > 1:
             return None
         else:
             return int(os.getenv("MAX_PARALLEL_LOADING_WORKERS", count_physical_cores()))
-        
+
     def _get_model_name_and_path(self):
         if os.path.exists("/local_model_path.txt"):
             model, download_dir = open("/local_model_path.txt", "r").read().strip(), None
             logging.info("Using local model at %s", model)
         else:
-            model, download_dir = os.getenv("MODEL_NAME"), os.getenv("HF_HOME")  
+            model, download_dir = os.getenv("MODEL_NAME"), os.getenv("HF_HOME")
         return model, download_dir
-        
+
     def _get_num_gpu_shard(self):
         num_gpu_shard = int(os.getenv("TENSOR_PARALLEL_SIZE", 1))
         if num_gpu_shard > 1:
@@ -467,11 +452,11 @@ class vLLMEngine:
             num_gpu_shard = min(num_gpu_shard, num_gpu_available)
             logging.info("Using %s GPU shards", num_gpu_shard)
         return num_gpu_shard
-    
+
     def _get_max_model_len(self):
         max_model_len = os.getenv("MAX_MODEL_LENGTH")
         return int(max_model_len) if max_model_len is not None else None
-    
+
     def _get_n_current_jobs(self):
         total_sequences = len(self.llm.engine.scheduler.waiting) + len(self.llm.engine.scheduler.swapped) + len(self.llm.engine.scheduler.running)
         return total_sequences
