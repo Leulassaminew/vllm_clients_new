@@ -16,7 +16,7 @@ def load_model():
                                                                   output_hidden_states=False)
         classifier = pipeline(task="text-classification", model="SamLowe/roberta-base-go_emotions", top_k=None)
     return model,tokenize,classifier
-    
+
 model=None
 tokenize=None
 classifier=None
@@ -70,4 +70,3 @@ runpod.serverless.start(
         "return_aggregate_stream": True,
     }
 )
-       
