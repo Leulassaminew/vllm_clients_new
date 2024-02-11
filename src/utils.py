@@ -31,10 +31,10 @@ def validate_sampling_params(params: Dict[str, Any]) -> Dict[str, Any]:
             validated_params[key] = value
         else:
             invalid_params.append(key)
-        
+
     if len(invalid_params) > 0:
         logging.warning("Ignoring invalid sampling params: %s", invalid_params)
-        
+
     return validated_params
 
 class JobInput:
@@ -54,7 +54,7 @@ class JobInput:
             self.classifier=job.get("classifier","")
         self.conv=job.get("conv", "")
         self.request_id = random_uuid()
-           
+
 class DummyRequest:
     async def is_disconnected(self):
         return False
