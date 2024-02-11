@@ -53,7 +53,7 @@ class JobInput:
             self.ind=job.get("ind",[])
             self.classifier=job.get("classifier","")
         elif self.task=="generatechar":
-            self.data = job.get("generatechar",["","","","","","","","",""])
+            self.data = job.get("generatechar",["","","","","","","",""])
         self.conv=job.get("conv", "")
         self.request_id = random_uuid()
 
